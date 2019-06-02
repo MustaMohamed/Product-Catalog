@@ -1,0 +1,15 @@
+
+
+
+.sidebar-toggle-menu {
+  display: none !important;
+}
+
+@media(max-width: 767px) {
+  .sidebar-toggle-menu {
+    display: flex !important;
+  }
+  .nav-menu-item {
+    display: none !important;
+  }
+}

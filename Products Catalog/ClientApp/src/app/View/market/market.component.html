@@ -1,0 +1,29 @@
+<div class="ui container">
+
+  <div class="ui dimmer" [class.active]="showLoader">
+    <div class="ui large text loader">Loading Products...</div>
+  </div>
+
+  <div class="market-top-header">
+    <div class="title">
+      <h1>Market</h1>
+    </div>
+
+    <div class="search-container">
+      <div class="ui icon input" [ngClass]="{'loading':  searchLoading}">
+        <input type="text" placeholder="Search...">
+        <i class="search icon"></i>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="ui centered grid cards">
+    <ng-container *ngFor="let productItem of productsList">
+      <div class="sixteen wide mobile five wide tablet four wide computer column">
+        <product [product]="productItem"></product>
+      </div>
+    </ng-container>
+
+  </div>
+  <app-pagination [right]="true" [pagesNumber]="productsPageNumber" [displayedPagesNumber]="12"></app-pagination>
+</div>

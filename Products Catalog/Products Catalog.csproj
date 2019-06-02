@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+        <IsPackable>false</IsPackable>
+        <SpaRoot>ClientApp\</SpaRoot>
+        <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+        <!-- Set this to true if you enable server-side prerendering -->
+        <BuildServerSideRenderer>false</BuildServerSideRenderer>
+        <RootNamespace>Profucts_Catalog</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Don't publish the SPA source files, but do show them in the project files list -->
+        <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\src\app\models\Product.ts" />
+        <Content Include="ClientApp\src\app\View\admin\admin.component.css" />
+        <Content Include="ClientApp\src\app\View\home\home.component.css" />
+        <Content Include="ClientApp\src\app\View\market\market.component.css" />
+        <Content Include="ClientApp\src\assets\images\home-bg.jpg" />
+        <Content Include="ClientApp\src\assets\semantic\semantic.min.css" />
+        <Content Include="ClientApp\src\assets\semantic\semantic.min.js" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\brand-icons.eot" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\brand-icons.svg" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\brand-icons.ttf" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\brand-icons.woff" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\brand-icons.woff2" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\icons.eot" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\icons.otf" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\icons.svg" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\icons.ttf" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\icons.woff" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\icons.woff2" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\outline-icons.eot" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\outline-icons.svg" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\outline-icons.ttf" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\outline-icons.woff" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\fonts\outline-icons.woff2" />
+        <Content Include="ClientApp\src\assets\semantic\themes\default\assets\images\flags.png" />
+        <Content Include="ClientApp\src\assets\tablesort.js" />
+        <None Remove="$(SpaRoot)**" />
+        <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+        <None Include="ClientApp\src\app\Shared\components\nav-menu\nav-menu.component.css" />
+        <None Include="ClientApp\src\app\Shared\components\nav-menu\nav-menu.component.html" />
+        <None Include="ClientApp\src\app\View\admin\admin.component.html" />
+        <None Include="ClientApp\src\app\View\admin\admin.component.ts" />
+        <None Include="ClientApp\src\app\View\home\home.component.html" />
+        <None Include="ClientApp\src\app\View\market\market.component.html" />
+        <None Include="ClientApp\src\app\View\market\market.component.spec.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ClientApp\src\app\Shared\components" />
+      <Folder Include="ClientApp\src\app\Shared\services" />
+      <Folder Include="ClientApp\src\app\View" />
+    </ItemGroup>
+
+    <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    </Target>
+
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+            <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
+
+</Project>

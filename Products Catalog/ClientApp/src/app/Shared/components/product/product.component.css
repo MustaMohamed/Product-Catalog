@@ -1,0 +1,12 @@
+.card.custom-card {
+  width: 100% !important;
+  height: 100%;
+}
+
+.card.custom-card > .image {
+  height: 150px;
+}
+
+.card.custom-card > .image img {
+  height: 100%;
+}

@@ -1,0 +1,28 @@
+<header>
+  <div class="ui secondary large pointing menu">
+    <div class="ui container">
+      <a class="header item" [routerLink]='["/"]'>
+        Products Catalog
+      </a>
+      <a class="item nav-menu-item" [routerLink]='["/"]' [routerLinkActive]='["active"]'
+         [routerLinkActiveOptions]='{ exact: true }'>
+        <i class="home icon"></i>
+        Home
+      </a>
+      <a class="item nav-menu-item" [routerLink]='["/market"]' [routerLinkActive]='["active"]'>
+        <i class="shopping cart icon"></i>
+        Market
+      </a>
+      <a class="item nav-menu-item" [routerLink]='["/admin"]' [routerLinkActive]='["active"]'>
+        <i class="user circle icon"></i>
+        Admin
+      </a>
+      <div class="right menu sidebar-toggle-menu">
+        <a id="toggleSideBar" class="item">
+          <i class="sidebar icon"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</header>

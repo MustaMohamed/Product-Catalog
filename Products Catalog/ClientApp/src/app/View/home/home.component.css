@@ -1,0 +1,24 @@
+.home-page {
+  height: 100vh;
+  background-image: url("../../../assets/images/home-bg.jpg");
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+.home-page .hero {
+  background: rgba(45, 52, 54, 0.4);
+  height: 100%;
+  color: #ecf0f1;
+}
+
+.home-page .hero .content {
+  position: relative;
+  top: 25vh;
+}
+
+.home-page .hero .content h1 {
+  margin-bottom: 2rem;
+}
+.home-page .hero .content p {
+  font-size: 1.5rem;
+}

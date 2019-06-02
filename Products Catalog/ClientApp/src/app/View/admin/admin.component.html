@@ -1,0 +1,132 @@
+<div class="ui container">
+
+  <div class="ui dimmer" [class.active]="showLoader">
+    <div class="ui large text loader">{{loaderMessage || 'Loading ...'}}</div>
+  </div>
+
+  <div class="table-container">
+    <table class="ui celled selectable compact table">
+      <thead>
+      <tr>
+        <th class="">#</th>
+        <th class="three wide single line">Product Name</th>
+        <th class="">Price</th>
+        <th class="two wide">Last Update</th>
+        <th class="two wide">Bought By</th>
+        <th class="four wide">image</th>
+        <th class="eight wide">Description</th>
+      </tr>
+      </thead>
+      <tbody *ngFor="let productItem of productsList">
+      <tr (click)="selectTableRor(productItem)">
+        <td>{{productItem.id}}</td>
+        <td class="single line">{{productItem.name}}</td>
+        <td>{{productItem.price}}</td>
+        <td>{{productItem.lastUpdated | date}}</td>
+        <td>{{productItem.boughtByCounter}}</td>
+        <td><img [src]="productItem.image" alt="placeholder"></td>
+        <td>{{productItem.description}}</td>
+      </tr>
+
+      </tbody>
+      <tfoot>
+      <tr>
+        <th colspan="2">
+          <button (click)="addNewProduct()" class="ui right floated small primary labeled icon button">
+            <i class="add icon"></i>
+            Add Product
+          </button>
+        </th>
+        <th colspan="5">
+          <app-pagination [right]="true" [pagesNumber]="productsTablePageNumber" [displayedPagesNumber]="8"
+                          (onPageChange)="onPageChange($event)"></app-pagination>
+        </th>
+
+      </tr>
+      </tfoot>
+    </table>
+
+    <div class="product-preview">
+      <sui-modal [isClosable]="true" #modal (dismissed)="productPreviewModalActionDismissed($event)"
+                 (approved)="productPreviewModalActionApproved($event)"
+                 *ngIf="showProductPreviewModal">
+        <div class="header">{{selectedProduct.name}}</div>
+
+        <div class="content">
+          <product [product]="selectedProduct"></product>
+        </div>
+        <div class="actions">
+          <button class="ui blue button" (click)="modal.deny()">Cancel</button>
+          <button class="ui blue button" (click)="modal.approve('edit')" autofocus>Edit Product</button>
+          <button class="ui red button" (click)="modal.approve('delete')" autofocus>Delete Product</button>
+        </div>
+      </sui-modal>
+    </div>
+
+    <div class="add-product">
+
+      <sui-modal [isClosable]="true" #modal
+                 (dismissed)="editProductModalActionDismissed()"
+                 (approved)="editProductModalActionApproved($event)"
+                 *ngIf="showEditProductModal">
+
+        <div class="header">{{isAddNewProductView ? 'Add new Product' : selectedProduct.name}}</div>
+
+        <div class="content">
+          <form class="ui form" [class.error]="editProductForm.invalid" [formGroup]="editProductForm">
+            <div class="field" [class.error]="editProductForm.controls['productName'].invalid &&
+                  (editProductForm.controls['productName'].dirty || editProductForm.controls['productName'].touched)">
+              <label>Product Name</label>
+              <input type="text" formControlName="productName" placeholder="product name">
+              <div *ngIf="editProductForm.controls['productName'].invalid &&
+                  (editProductForm.controls['productName'].dirty || editProductForm.controls['productName'].touched)"
+                   class="ui error message">
+                <div class="header">Product Name is required</div>
+                <p>You should enter product name</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Product Description</label>
+              <textarea rows="3" formControlName="productDescription" placeholder="any text">
+              </textarea>
+            </div>
+
+            <div class="field" [class.error]="editProductForm.controls['productImage'].invalid && imageBtnTouched">
+              <label>Product Image</label>
+              <input style="display: none"
+                     formControlName="productImage" (click)="selectImage()" type="file" #fileInput>
+              <button class="ui teal button" (click)="fileInput.click()"><i class="upload icon"></i>Select File</button>
+              <div *ngIf="editProductForm.controls['productImage'].invalid && imageBtnTouched"
+                   class="ui error message">
+                <div class="header">Product Image is required</div>
+                <p>You should select valid product image</p>
+              </div>
+            </div>
+
+            <div class="field" [class.error]="editProductForm.controls['productPrice'].invalid &&
+                  (editProductForm.controls['productPrice'].dirty || editProductForm.controls['productPrice'].touched)">
+              <label>Product Price</label>
+              <input type="number" formControlName="productPrice" placeholder="0">
+              <div *ngIf="editProductForm.controls['productPrice'].invalid &&
+                  (editProductForm.controls['productPrice'].dirty || editProductForm.controls['productPrice'].touched)"
+                   class="ui error message">
+                <div class="header">Product Price is required</div>
+                <p>You should enter product price more than 1 and less than 1000</p>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="actions">
+          <button class="ui red button" (click)="modal.deny()">Cancel</button>
+          <button class="ui green button" [disabled]="editProductForm.invalid" (click)="modal.approve('save')"
+                  autofocus>Save
+          </button>
+        </div>
+      </sui-modal>
+    </div>
+
+  </div>
+
+
+</div>

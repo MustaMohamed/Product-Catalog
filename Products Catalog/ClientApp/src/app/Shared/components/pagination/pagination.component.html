@@ -1,0 +1,16 @@
+<div [ngClass]="{'right': right && !left, 'left': left && !right, 'ui floated pagination menu': true}">
+  <a class="icon item" (click)="changePage(currentPage - 1)">
+    <i class="left chevron icon"></i>
+  </a>
+  <a class="item" [class.active]="currentPage == 1" (click)="changePage(1)">1</a>
+  <a *ngIf="currentPage > 3 && pagesNumber > displayedPagesNumber" class="item">...</a>
+  <ng-container *ngFor="let i of pagesList">
+    <a class="item" [class.active]="i == currentPage" (click)="changePage(i)">{{i}}</a>
+  </ng-container>
+  <a *ngIf="pagesList[pagesList.length - 1] + 1 != pagesNumber && pagesNumber > displayedPagesNumber" class="item">...</a>
+  <a *ngIf="pagesNumber > 1" class="item" [class.active]="currentPage == pagesNumber" (click)="changePage(pagesNumber)">{{pagesNumber}}</a>
+
+  <a class="icon item" (click)="changePage(currentPage + 1)">
+    <i class="right chevron icon"></i>
+  </a>
+</div>

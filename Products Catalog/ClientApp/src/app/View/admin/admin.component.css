@@ -1,0 +1,7 @@
+.table-container {
+  margin: 2rem 0;
+}
+
+.table-container  table tbody tr {
+  cursor: pointer;
+}
