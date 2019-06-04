@@ -120,6 +120,7 @@ export class AdminComponent implements OnInit {
       this.setProductEditModalState(true);
     } else if (e == 'delete') {
       console.log('delete');
+      this.deleteProductFromServer(this.selectedProductModalView.id);
     }
     this.setProductPreviewModalState(false);
   }
@@ -210,24 +211,39 @@ export class AdminComponent implements OnInit {
         boughtByCounter: this.selectedProductModalView.boughtByCounter
       };
     }
-    console.log(editFormObject);
     this.sendProductToServer(editFormObject);
+  }
+
+  deleteProductFromServer(productId) {
+    this.productsService.deleteProduct(productId)
+      .subscribe(res => {
+        this.productsList = this.productsList.filter(p => p.id != this.selectedProduct.id);
+        this.selectedProduct = new Product();
+        this.selectedProductModalView = new Product();
+      })
   }
 
   // send product object to server
   sendProductToServer(product: Product) {
     this.showLoader = true;
     if (!this.isAddNewProductView) {
-      this.productsService.editProduct(product).subscribe(res => {
+      this.productsService.updateProduct(product).subscribe(res => {
         // update existing product item
-        const productIdx = this.productsList.indexOf(product);
-        this.productsList[productIdx] = {...res};
+
+        /*
+        * Description:
+        *   this logic if for immediate update the table entry
+        *   change the productsList reference to enforce the UI to re-render
+        * **/
+        const tempProductsList = [...this.productsList];
+        const productIdx = tempProductsList.findIndex(p => p.id == product.id);
+        tempProductsList[productIdx] = {...res};
+        this.productsList = [...tempProductsList];
         this.showLoader = false;
       }, err => this.showLoader = false);
     } else {
       this.productsService.addProduct(product).subscribe(res => {
-        // update existing product item
-        console.log(res);
+        // add new product item
         this.productsList.push(res);
         this.showLoader = false;
       }, err => this.showLoader = false);

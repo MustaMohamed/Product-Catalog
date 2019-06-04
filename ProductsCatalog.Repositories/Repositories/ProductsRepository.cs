@@ -20,11 +20,5 @@ namespace ProductCatalog.Repositories.Repositories
             var product = this.Entities.SingleOrDefault(p => p.Id == id);
             return product;
         }
-
-        public void Delete(int id)
-        {
-            var product = this.Entities.SingleOrDefault(p => p.Id == id);
-            this.Entities.Remove(product);
-        }
     }
 }

@@ -10,5 +10,7 @@ namespace ProductCatalog.Core.Services
         Product AddProduct(Product product);
         IEnumerable<Product> GetProductsWithPagination(int? pageNumber, int? pageSize);
         long GetAllProductsCount();
+        Product UpdateProduct(Product product);
+        void DeleteProduct(int id);
     }
 }

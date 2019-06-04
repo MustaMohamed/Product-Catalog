@@ -44,5 +44,19 @@ namespace Profucts_Catalog.Services.Services
         {
             return this._productsRepository.GetCount();
         }
+
+        public Product UpdateProduct(Product newProduct)
+        {
+            var product = this._productsRepository.Update(newProduct);
+            this._unitOfWork.Complete();
+            return product;
+        }
+
+        public void DeleteProduct(int id)
+        {
+            var product = this._productsRepository.Get(id);
+            this._productsRepository.Delete(product);
+            this._unitOfWork.Complete();
+        }
     }
 }

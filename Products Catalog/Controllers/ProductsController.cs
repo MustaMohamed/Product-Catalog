@@ -38,5 +38,18 @@ namespace Profucts_Catalog.Controllers
             var allProductsCount = this._productsService.GetAllProductsCount();
             return Json(new ProductsViewModel {Products = products, Count = allProductsCount});
         }
+
+        [HttpPut("[action]")]
+        public IActionResult UpdateProduct([FromBody] Product newProduct)
+        {
+            var product = this._productsService.UpdateProduct(newProduct);
+            return Json(product);
+        }
+
+        [HttpPost("[action]")]
+        public void DeleteProduct([FromQuery] int id)
+        {
+            this._productsService.DeleteProduct(id);
+        }
     }
 }

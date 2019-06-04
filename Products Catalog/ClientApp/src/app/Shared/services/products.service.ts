@@ -33,11 +33,11 @@ export class ProductsService extends BaseService {
   }
 
   deleteProduct(productId) {
-    return this.deleteData(`${this.productControl}/${productId}`);
+    return this.deleteData(`${this.productControl}/DeleteProduct?id=${productId}`);
   }
 
-  editProduct(product): Observable<Product> {
-    return this.putData(this.productControl, product);
+  updateProduct(product): Observable<Product> {
+    return this.putData(`${this.productControl}/updateproduct`, product);
   }
 
 }
