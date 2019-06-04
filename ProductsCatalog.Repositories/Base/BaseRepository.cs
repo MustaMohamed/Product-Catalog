@@ -35,18 +35,19 @@ namespace ProductCatalog.Repositories.Base
             return this.Entities.Find(id);
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            var result = this.Entities.AsEnumerable();
+            var result = this.Entities.AsQueryable();
             return result;
         }
 
         public T Add(T entity)
         {
-            if (entity == null)  
-            {  
-                throw new ArgumentNullException(nameof(entity));  
-            }  
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             this.Entities.Add(entity);
             return entity;
         }

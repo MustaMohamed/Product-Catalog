@@ -8,5 +8,7 @@ namespace ProductCatalog.Core.Services
     {
         IEnumerable<Product> GetAllProducts();
         Product AddProduct(Product product);
+        IEnumerable<Product> GetProductsWithPagination(int? pageNumber, int? pageSize);
+        long GetAllProductsCount();
     }
 }

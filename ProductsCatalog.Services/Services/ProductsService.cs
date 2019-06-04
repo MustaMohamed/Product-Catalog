@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ProductCatalog.Core.Core;
 using ProductCatalog.Core.Repositories;
 using ProductCatalog.Core.Services;
@@ -29,6 +30,19 @@ namespace Profucts_Catalog.Services.Services
             this._productsRepository.Add(product);
             this._unitOfWork.Complete();
             return product;
+        }
+
+        public IEnumerable<Product> GetProductsWithPagination(int? pageNumber, int? pageSize)
+        {
+            var productsQueryable = _productsRepository.GetAll();
+            var skipCount = (pageSize ?? 5) * ((pageNumber ?? 1) - 1);
+            var products = productsQueryable.Skip(skipCount).Take(pageSize ?? 5).AsEnumerable();
+            return products;
+        }
+
+        public long GetAllProductsCount()
+        {
+            return this._productsRepository.GetCount();
         }
     }
 }

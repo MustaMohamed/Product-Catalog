@@ -25,5 +25,6 @@
     </ng-container>
 
   </div>
-  <app-pagination [right]="true" [pagesNumber]="productsPageNumber" [displayedPagesNumber]="12"></app-pagination>
+  <app-pagination [right]="true" [pagesNumber]="productsPagesNumber" [displayedPagesNumber]="5"
+                  (onPageChange)="onPageChange($event)"></app-pagination>
 </div>

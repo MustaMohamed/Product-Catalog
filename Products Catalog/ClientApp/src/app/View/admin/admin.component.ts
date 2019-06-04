@@ -23,6 +23,8 @@ export class AdminComponent implements OnInit {
   // pagination
   public productsTablePageNumber: number = 1;
   public productsTablePageSize: number = 5;
+  public productsPagesNumber: number = 1;
+  public allProductsCount: number = 1;
 
   // modal hide and show flags
   public showProductPreviewModal: boolean = false;
@@ -48,11 +50,20 @@ export class AdminComponent implements OnInit {
     this.getProductsFromServer();
   }
 
+
+  updateProductsCount(count) {
+    this.allProductsCount = count;
+    this.productsPagesNumber = Math.ceil(count / this.productsTablePageSize);
+    console.log(this.productsPagesNumber);
+  }
+
+
   // get products
   getProductsFromServer() {
-    this.productsService.getAllProducts()
+    this.productsService.getProductsWithPagination(this.productsTablePageNumber, this.productsTablePageSize)
       .subscribe(res => {
-        this.productsList = res;
+        this.productsList = res.products;
+        this.updateProductsCount(res.count);
         this.showLoader = false;
       }, err => this.showLoader = false);
   }
@@ -176,9 +187,6 @@ export class AdminComponent implements OnInit {
   // handle submit the form data
   submitEditForm() {
     let editFormObject: Product;
-
-
-
 
 
     if (!this.isAddNewProductView) {

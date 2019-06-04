@@ -7,8 +7,10 @@
   <ng-container *ngFor="let i of pagesList">
     <a class="item" [class.active]="i == currentPage" (click)="changePage(i)">{{i}}</a>
   </ng-container>
-  <a *ngIf="pagesList[pagesList.length - 1] + 1 != pagesNumber && pagesNumber > displayedPagesNumber" class="item">...</a>
-  <a *ngIf="pagesNumber > 1" class="item" [class.active]="currentPage == pagesNumber" (click)="changePage(pagesNumber)">{{pagesNumber}}</a>
+  <a *ngIf="pagesList[pagesList.length - 1] + 1 != pagesNumber && pagesNumber > displayedPagesNumber"
+     class="item">...</a>
+  <a *ngIf="pagesNumber > 1" class="item" [class.active]="currentPage == pagesNumber"
+     (click)="changePage(pagesNumber)">{{pagesNumber}}</a>
 
   <a class="icon item" (click)="changePage(currentPage + 1)">
     <i class="right chevron icon"></i>

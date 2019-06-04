@@ -3,6 +3,7 @@ import {BaseService} from "./base.service";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import Product from "../../models/Product";
+import ProductsResponse from "../../models/ProductsResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +16,12 @@ export class ProductsService extends BaseService {
     super(http, baseUrl);
   }
 
-  getAllProducts(): Observable<Product[]> {
+  getAllProducts(): Observable<ProductsResponse> {
     return this.getAllData(`${this.productControl}/all`);
   }
 
-  getProductsWithPagination(pageNumber, pageCount): Observable<Product[]> {
-    return this.getData(`${this.productControl}/page=${pageNumber}&pageSize=${pageCount}`)
+  getProductsWithPagination(pageNumber, pageCount): Observable<ProductsResponse> {
+    return this.getData(`${this.productControl}/WithPagination?pageNumber=${pageNumber}&&pageSize=${pageCount}`)
   }
 
   getProduct(productId): Observable<Product> {
