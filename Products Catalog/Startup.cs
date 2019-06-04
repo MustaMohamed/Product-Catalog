@@ -32,7 +32,7 @@ namespace Profucts_Catalog
             services.AddDbContext<ProductsCatalogContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProductsDatabase"),
                     x => x.MigrationsAssembly("ProductsCatalog.DataAccess")));
-
+        
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IProductsService, ProductsService>();
@@ -79,6 +79,20 @@ namespace Profucts_Catalog
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+            
+            InitializeDatabase(app);
         }
+        
+        
+        private static void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<ProductsCatalogContext>().Database.Migrate();
+//                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                   
+            }
+        }
+        
     }
 }
