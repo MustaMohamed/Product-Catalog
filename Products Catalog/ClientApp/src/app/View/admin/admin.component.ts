@@ -36,6 +36,9 @@ export class AdminComponent implements OnInit {
   public showLoader: boolean = true;
   public loaderMessage: string = '';
 
+  public imageValueBytes: any;
+
+
   constructor(private productsService: ProductsService, private fb: FormBuilder) {
 
   }
@@ -152,6 +155,17 @@ export class AdminComponent implements OnInit {
     this.imageBtnTouched = true;
   }
 
+  imageChange(e) {
+    console.log(e.target.files);
+    if (e.target.files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageValueBytes = reader.result;
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
+
   // initializing add new product modal
   addNewProduct() {
     this.setIsAddNewProductViewState(true);
@@ -161,27 +175,55 @@ export class AdminComponent implements OnInit {
 
   // handle submit the form data
   submitEditForm() {
-    const editFormObject: Product = {
-      name: this.editProductForm.controls['productName'].value || this.selectedProductModalView.name,
-      description: this.editProductForm.controls['productDescription'].value || this.selectedProductModalView.description,
-      price: this.editProductForm.controls['productPrice'].value || this.selectedProductModalView.price,
-      image: this.editProductForm.controls['productImage'].value || this.selectedProductModalView.image,
-      id: this.selectedProductModalView.id,
-      lastUpdated: (new Date()).toDateString(),
-      boughtByCounter: this.selectedProductModalView.boughtByCounter
-    };
+    let editFormObject: Product;
+
+
+
+
+
+    if (!this.isAddNewProductView) {
+      editFormObject = {
+        name: this.editProductForm.controls['productName'].value ? this.editProductForm.controls['productName'].value : this.selectedProductModalView.name,
+        description: this.editProductForm.controls['productDescription'].value ? this.editProductForm.controls['productDescription'].value : this.selectedProductModalView.description,
+        price: this.editProductForm.controls['productPrice'].value ? this.editProductForm.controls['productPrice'].value : this.selectedProductModalView.price,
+        image: this.imageValueBytes ? this.imageValueBytes : this.selectedProductModalView.image,
+        id: this.selectedProductModalView.id,
+        lastUpdated: (new Date()).toDateString(),
+        boughtByCounter: this.selectedProductModalView.boughtByCounter
+      };
+    } else {
+      editFormObject = {
+        name: this.editProductForm.controls['productName'].value,
+        description: this.editProductForm.controls['productDescription'].value,
+        price: this.editProductForm.controls['productPrice'].value,
+        image: this.imageValueBytes,
+        id: this.selectedProductModalView.id,
+        lastUpdated: (new Date()).toDateString(),
+        boughtByCounter: this.selectedProductModalView.boughtByCounter
+      };
+    }
+    console.log(editFormObject);
     this.sendProductToServer(editFormObject);
   }
 
   // send product object to server
   sendProductToServer(product: Product) {
     this.showLoader = true;
-    this.productsService.editProduct(product).subscribe(res => {
-      // update existing product item
-      const productIdx = this.productsList.indexOf(product);
-      this.productsList[productIdx] = {...res};
-      this.showLoader = false;
-    }, err => this.showLoader = false);
+    if (!this.isAddNewProductView) {
+      this.productsService.editProduct(product).subscribe(res => {
+        // update existing product item
+        const productIdx = this.productsList.indexOf(product);
+        this.productsList[productIdx] = {...res};
+        this.showLoader = false;
+      }, err => this.showLoader = false);
+    } else {
+      this.productsService.addProduct(product).subscribe(res => {
+        // update existing product item
+        console.log(res);
+        this.productsList.push(res);
+        this.showLoader = false;
+      }, err => this.showLoader = false);
+    }
   }
 
 }

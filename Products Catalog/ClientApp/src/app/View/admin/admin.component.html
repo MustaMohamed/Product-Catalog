@@ -24,7 +24,7 @@
         <td>{{productItem.price}}</td>
         <td>{{productItem.lastUpdated | date}}</td>
         <td>{{productItem.boughtByCounter}}</td>
-        <td><img [src]="productItem.image" alt="placeholder"></td>
+        <td><img height="200px" width="200px" [src]="productItem.image" alt="placeholder"></td>
         <td>{{productItem.description}}</td>
       </tr>
 
@@ -95,8 +95,8 @@
             <div class="field" [class.error]="editProductForm.controls['productImage'].invalid && imageBtnTouched">
               <label>Product Image</label>
               <input style="display: none"
-                     formControlName="productImage" (click)="selectImage()" type="file" #fileInput>
-              <button class="ui teal button" (click)="fileInput.click()"><i class="upload icon"></i>Select File</button>
+                     formControlName="productImage" (change)="imageChange($event)" (click)="selectImage()" type="file" #fileInput>
+              <button class="ui teal button" (change)="fileInput.onchange()" (click)="fileInput.click()"><i class="upload icon"></i>Select File</button>
               <div *ngIf="editProductForm.controls['productImage'].invalid && imageBtnTouched"
                    class="ui error message">
                 <div class="header">Product Image is required</div>

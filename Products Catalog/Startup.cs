@@ -3,8 +3,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductCatalog.Core.Core;
+using ProductCatalog.Core.Repositories;
+using ProductCatalog.Core.Services;
+using ProductCatalog.Repositories.Repositories;
+using Profucts_Catalog.DataAccess;
+using Profucts_Catalog.Services.Services;
 
 namespace Profucts_Catalog
 {
@@ -21,6 +28,15 @@ namespace Profucts_Catalog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddDbContext<ProductsCatalogContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("ProductsDatabase"),
+                    x => x.MigrationsAssembly("ProductsCatalog.DataAccess")));
+
+
+            services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });

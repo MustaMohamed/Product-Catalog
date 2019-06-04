@@ -28,7 +28,7 @@ export class ProductsService extends BaseService {
   }
 
   addProduct(product): Observable<Product> {
-    return this.postData(this.productControl, product);
+    return this.postData(`${this.productControl}/add`, product);
   }
 
   deleteProduct(productId) {
