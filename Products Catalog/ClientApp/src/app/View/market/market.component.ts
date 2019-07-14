@@ -39,7 +39,6 @@ export class MarketComponent implements OnInit {
   searchForProduct(productName) {
     this.showLoader = true;
     this.searchLoading = true;
-    console.log(productName);
     if (productName === '') {
       this.getProductsFromServer();
       this.showLoader = false;
@@ -47,7 +46,6 @@ export class MarketComponent implements OnInit {
     } else {
       this.productsService.searchForProduct(productName, this.productsPageNumber, this.productsPageSize)
         .subscribe(res => {
-          console.log(res);
           this.productsList = res.products;
           this.updateProductsCount(res.count);
           this.showLoader = false;
@@ -65,7 +63,6 @@ export class MarketComponent implements OnInit {
   getProductsFromServer() {
     this.productsService.getProductsWithPagination(this.productsPageNumber, this.productsPageSize)
       .subscribe(res => {
-        console.log(res);
         this.productsList = res.products;
         this.updateProductsCount(res.count);
         this.showLoader = false;

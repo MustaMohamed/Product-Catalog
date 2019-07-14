@@ -12,6 +12,7 @@ using ProductCatalog.Core.Services;
 using ProductCatalog.Repositories.Repositories;
 using Profucts_Catalog.DataAccess;
 using Profucts_Catalog.Services.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Profucts_Catalog
 {
@@ -32,7 +33,7 @@ namespace Profucts_Catalog
             services.AddDbContext<ProductsCatalogContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProductsDatabase"),
                     x => x.MigrationsAssembly("ProductsCatalog.DataAccess")));
-        
+
 
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IProductsService, ProductsService>();
@@ -40,6 +41,8 @@ namespace Profucts_Catalog
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
+            services.AddSwaggerGen(sw => { sw.SwaggerDoc("v1", new Info() {Title = "Products Catalog API"}); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +70,9 @@ namespace Profucts_Catalog
                     template: "{controller}/{action=Index}/{id?}");
             });
 
+            app.UseSwagger();
+            app.UseSwaggerUI(sw => { sw.SwaggerEndpoint("/swagger/v1/swagger.json", "Products Catalog API"); });
+
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
@@ -79,20 +85,18 @@ namespace Profucts_Catalog
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-            
+
             InitializeDatabase(app);
         }
-        
-        
+
+
         private static void InitializeDatabase(IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 scope.ServiceProvider.GetRequiredService<ProductsCatalogContext>().Database.Migrate();
 //                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-                   
             }
         }
-        
     }
 }
