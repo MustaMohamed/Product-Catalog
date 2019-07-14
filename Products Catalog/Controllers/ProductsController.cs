@@ -39,6 +39,15 @@ namespace Profucts_Catalog.Controllers
             return Json(new ProductsViewModel {Products = products, Count = allProductsCount});
         }
 
+        [HttpGet("[action]")]
+        public IActionResult SearchWithPagination([FromQuery] string productName, [FromQuery] int? pageNumber = 1,
+            [FromQuery] int? pageSize = 5)
+        {
+            var products = this._productsService.SearchForProductsWithPagination(productName, pageNumber, pageSize);
+            var allProductsCount = this._productsService.GetAllProductsCount();
+            return Json(new ProductsViewModel {Products = products, Count = allProductsCount});
+        }
+
         [HttpPut("[action]")]
         public IActionResult UpdateProduct([FromBody] Product newProduct)
         {

@@ -24,6 +24,18 @@ namespace Profucts_Catalog.Services.Services
             return this._productsRepository.GetAll();
         }
 
+        public IEnumerable<Product> SearchForProducts(string productName)
+        {
+            return _productsRepository.GetAll().Where(p => p.Name.ToLower().Contains(productName.ToLower()));
+        }
+
+        public IEnumerable<Product> SearchForProductsWithPagination(string productName, int? pageNumber, int? pageSize)
+        {
+            var productsQueryable = this.SearchForProducts(productName);
+            var skipCount = (pageSize ?? 5) * ((pageNumber ?? 1) - 1);
+            var products = productsQueryable.Skip(skipCount).Take(pageSize ?? 5).AsEnumerable();
+            return products;
+        }
 
         public Product AddProduct(Product product)
         {

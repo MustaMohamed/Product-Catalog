@@ -40,4 +40,8 @@ export class ProductsService extends BaseService {
     return this.putData(`${this.productControl}/updateproduct`, product);
   }
 
+  searchForProduct(productName, pageNumber, pageCount): Observable<ProductsResponse> {
+    return this.getData(`${this.productControl}/SearchWithPagination?productName=${productName}&&pageNumber=${pageNumber}&&pageSize=${pageCount}`)
+  }
+
 }

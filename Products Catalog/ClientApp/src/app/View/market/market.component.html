@@ -11,7 +11,7 @@
 
     <div class="search-container">
       <div class="ui icon input" [ngClass]="{'loading':  searchLoading}">
-        <input type="text" placeholder="Search...">
+        <input type="text" (input)="searchForProduct($event.target.value)" placeholder="Search...">
         <i class="search icon"></i>
       </div>
     </div>

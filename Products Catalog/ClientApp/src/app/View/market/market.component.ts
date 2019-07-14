@@ -33,14 +33,32 @@ export class MarketComponent implements OnInit {
 
   onPageChange(page) {
     this.productsPageNumber = page;
-    console.log(page);
     this.getProductsFromServer();
+  }
+
+  searchForProduct(productName) {
+    this.showLoader = true;
+    this.searchLoading = true;
+    console.log(productName);
+    if (productName === '') {
+      this.getProductsFromServer();
+      this.showLoader = false;
+      this.searchLoading = false;
+    } else {
+      this.productsService.searchForProduct(productName, this.productsPageNumber, this.productsPageSize)
+        .subscribe(res => {
+          console.log(res);
+          this.productsList = res.products;
+          this.updateProductsCount(res.count);
+          this.showLoader = false;
+          this.searchLoading = false;
+        }, err => this.showLoader = false);
+    }
   }
 
   updateProductsCount(count) {
     this.allProductsCount = count;
     this.productsPagesNumber = Math.ceil(count / this.productsPageSize);
-    console.log(this.productsPagesNumber);
   }
 
   // get products
