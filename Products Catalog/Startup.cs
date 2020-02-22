@@ -94,8 +94,14 @@ namespace Profucts_Catalog
         {
             using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                scope.ServiceProvider.GetRequiredService<ProductsCatalogContext>().Database.Migrate();
+               // scope.ServiceProvider.GetRequiredService<ProductsCatalogContext>().Database.Migrate();
 //                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                using (var context = scope.ServiceProvider.GetRequiredService<ProductsCatalogContext>())
+                {
+                    context.Database.EnsureDeleted();
+                    // context.Database.Migrate();
+                    context.Database.EnsureCreated();
+                }
             }
         }
     }
